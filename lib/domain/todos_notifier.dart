@@ -26,6 +26,8 @@ class TodosNotifier extends ValueNotifier<TodosState> {
     _init();
   }
   String appPath = '';
+  String get _todosFilePath => '$appPath\\todos.json';
+  String get imagesPath => '$appPath\\images';
 
   @override
   set value(TodosState newValue) {
@@ -48,7 +50,7 @@ class TodosNotifier extends ValueNotifier<TodosState> {
   }
 
   _loadTodos() async {
-    final file = File('$appPath\\todos.json');
+    final file = File(_todosFilePath);
     if (!file.existsSync()) {
       file.create(recursive: true);
     }
