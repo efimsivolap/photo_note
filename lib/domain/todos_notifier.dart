@@ -44,6 +44,10 @@ class TodosNotifier extends ValueNotifier<TodosState> {
     final appDocumentsDir = await pp.getApplicationDocumentsDirectory();
     appPath = '${appDocumentsDir.path}\\todos_app';
 
+    await _loadTodos();
+  }
+
+  _loadTodos() async {
     final file = File('$appPath\\todos.json');
     if (!file.existsSync()) {
       file.create(recursive: true);
