@@ -61,7 +61,10 @@ class _TodosScreenState extends State<TodosScreen> {
           TodosData() => Column(
               children: [
                 Expanded(
-                  child: ListView.builder(
+                  child: ListView.separated(
+                    separatorBuilder: (context, index) => const Divider(
+                      thickness: 0.5,
+                    ),
                     itemCount: todosState.todos.length,
                     itemBuilder: (BuildContext context, int index) {
                       final todo = todosState.todos[index];

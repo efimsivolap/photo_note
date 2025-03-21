@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
 class TodoInputField extends StatefulWidget {
-  const TodoInputField({super.key, required this.onCreate});
+  const TodoInputField({
+    super.key,
+    required this.onCreate,
+  });
 
   final Function(String title) onCreate;
 
@@ -10,11 +13,11 @@ class TodoInputField extends StatefulWidget {
 }
 
 class _TodoInputFieldState extends State<TodoInputField> {
-  final textCR = TextEditingController();
+  final _textCR = TextEditingController();
 
   @override
   void dispose() {
-    textCR.dispose();
+    _textCR.dispose();
     super.dispose();
   }
 
@@ -31,21 +34,38 @@ class _TodoInputFieldState extends State<TodoInputField> {
         child: Row(
           children: [
             Expanded(
-              child: TextField(
-                controller: textCR,
-                textInputAction: TextInputAction.done,
-                decoration: InputDecoration(
-                  hintText: 'Введите задачу...',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  TextField(
+                    controller: _textCR,
+                    textInputAction: TextInputAction.done,
+                    decoration: InputDecoration(
+                      hintText: 'Введите задачу...',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
                   ),
-                ),
+                  SizedBox(height: 8),
+                  ValueListenableBuilder(
+                    valueListenable: _textCR,
+                    builder: (context, value, child) {
+                      return ElevatedButton(
+                        onPressed: value.text.isNotEmpty
+                            ? () {
+                                widget.onCreate(_textCR.text);
+                                _textCR.clear();
+                              }
+                            : null,
+                        child: const Text(
+                          "Добавить",
+                        ),
+                      );
+                    },
+                  ),
+                ],
               ),
-            ),
-            const SizedBox(width: 8),
-            IconButton(
-              icon: const Icon(Icons.add),
-              onPressed: () => widget.onCreate(textCR.text),
             ),
           ],
         ),
