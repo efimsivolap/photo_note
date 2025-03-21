@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class TodoItemWidget extends StatelessWidget {
-  const TodoItemWidget({super.key});
+class TodoItem extends StatelessWidget {
+  const TodoItem({super.key});
 
   @override
   Widget build(BuildContext context) {

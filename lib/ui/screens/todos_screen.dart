@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:photo_note/ui/widgets/filter_menu.dart';
 import 'package:photo_note/ui/widgets/todo_input_field.dart';
-import 'package:photo_note/ui/widgets/todo_item_widget.dart';
+import 'package:photo_note/ui/widgets/todo_item.dart';
 
 class TodosScreen extends StatelessWidget {
   const TodosScreen({super.key});
@@ -16,7 +16,7 @@ class TodosScreen extends StatelessWidget {
       ),
       body: const Column(
         children: [
-          Expanded(child: TodoItemWidget()),
+          Expanded(child: TodoItem()),
           TodoInputField(),
           SizedBox(height: 20),
         ],

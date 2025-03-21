@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:photo_note/models/todo.dart';
 
 class EditTodoScreen extends StatelessWidget {
-  const EditTodoScreen({super.key});
+  const EditTodoScreen({super.key, required this.todo, required this.onSave});
+
+  final Todo todo;
+  final Function() onSave;
 
   @override
   Widget build(BuildContext context) {
