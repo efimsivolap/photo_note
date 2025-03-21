@@ -70,7 +70,32 @@ class _TodosScreenState extends State<TodosScreen> {
                       final todo = todosState.todos[index];
 
                       return TodoTile(
-                        onDelete: () => _todosNR.deleteTodo(todo),
+                        onDelete: () async {
+                          final confirm = await showDialog<bool>(
+                            context: context,
+                            barrierDismissible: false,
+                            builder: (context) => AlertDialog(
+                              title: const Text('Подтверждение'),
+                              content: const Text(
+                                  'Вы действительно хотите удалить задачу?'),
+                              actions: [
+                                TextButton(
+                                  onPressed: () =>
+                                      Navigator.pop(context, false),
+                                  child: const Text('Отмена'),
+                                ),
+                                ElevatedButton(
+                                  onPressed: () => Navigator.pop(context, true),
+                                  child: const Text('Удалить'),
+                                ),
+                              ],
+                            ),
+                          );
+
+                          if (confirm == true) {
+                            _todosNR.deleteTodo(todo);
+                          }
+                        },
                         onUpdate: (
                           String title,
                           String description,

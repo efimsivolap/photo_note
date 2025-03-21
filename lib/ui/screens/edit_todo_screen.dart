@@ -94,7 +94,7 @@ class _EditTodoScreenState extends State<EditTodoScreen> {
                         label: const Text('Галерея',
                             style: TextStyle(fontSize: 18)),
                         style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          padding: const EdgeInsets.symmetric(vertical: 10),
                         ),
                       ),
                     ),
@@ -106,7 +106,7 @@ class _EditTodoScreenState extends State<EditTodoScreen> {
                         label: const Text('Камера',
                             style: TextStyle(fontSize: 18)),
                         style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          padding: const EdgeInsets.symmetric(vertical: 10),
                         ),
                       ),
                     ),
@@ -116,8 +116,7 @@ class _EditTodoScreenState extends State<EditTodoScreen> {
             ),
             const SizedBox(height: 16),
             _images.isNotEmpty
-                ? SizedBox(
-                    height: 150,
+                ? Expanded(
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
                       itemCount: _images.length,
@@ -127,15 +126,18 @@ class _EditTodoScreenState extends State<EditTodoScreen> {
                             padding: const EdgeInsets.all(4),
                             child: Image.file(
                               _images[index],
-                              height: 150,
-                              width: 150,
+                              height: 100,
+                              width: 100,
                               fit: BoxFit.cover,
                             ),
                           ),
                           Positioned(
                             right: 0,
                             child: IconButton(
-                              icon: const Icon(Icons.cancel, color: Colors.red),
+                              icon: const Icon(
+                                Icons.cancel,
+                                color: Colors.white,
+                              ),
                               onPressed: () {
                                 setState(() {
                                   _images.removeAt(index);
@@ -148,7 +150,6 @@ class _EditTodoScreenState extends State<EditTodoScreen> {
                     ),
                   )
                 : const Text('Нет выбранных изображений'),
-            const Spacer(),
             ElevatedButton(
               onPressed: () {
                 widget.onSave(
@@ -158,7 +159,10 @@ class _EditTodoScreenState extends State<EditTodoScreen> {
                 );
                 Navigator.pop(context);
               },
-              child: const Text('Сохранить'),
+              child: const Text(
+                'Сохранить',
+                style: TextStyle(fontSize: 18),
+              ),
             ),
           ],
         ),

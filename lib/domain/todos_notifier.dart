@@ -38,11 +38,11 @@ class TodosNotifier extends ValueNotifier<TodosState> {
   @override
   set value(TodosState newValue) {
     if (newValue case TodosData(:final todos)) {
-      final result =
-          todos.toList()..sort(switch (_filter) {
-            FilterTodos.byDate => (a, b) => b.created.compareTo(a.created),
-            FilterTodos.byName => (a, b) => a.title.compareTo(b.title),
-          });
+      final result = todos.toList()
+        ..sort(switch (_filter) {
+          FilterTodos.byDate => (a, b) => b.created.compareTo(a.created),
+          FilterTodos.byName => (a, b) => a.title.compareTo(b.title),
+        });
 
       _saveTodos(result);
 
