@@ -18,13 +18,26 @@ class TodosError extends TodosState {
 }
 
 class TodosNotifier extends ValueNotifier<TodosState> {
-  TodosNotifier() : super(TodosLoading());
+  TodosNotifier() : super(TodosLoading()) {
+    _init();
+  }
 
-  addTodo({
-    required String title,
-    String? description,
-    List<String>? photos,
-  }) async {}
+  _init() async {
+    value = TodosData(await _loadTodos());
+  }
+
+  Future<List<Todo>> _loadTodos() async {
+    return [
+      Todo(
+        title: 'Важная заметка',
+        description: 'Была сохранена ранее',
+        created: DateTime.now(),
+        photos: [],
+      ),
+    ];
+  }
+
+  addTodo({required String title}) async {}
 
   updateTodo({
     String? title,

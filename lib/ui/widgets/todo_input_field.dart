@@ -1,7 +1,22 @@
 import 'package:flutter/material.dart';
 
-class TodoInputField extends StatelessWidget {
-  const TodoInputField({super.key});
+class TodoInputField extends StatefulWidget {
+  const TodoInputField({super.key, required this.onCreate});
+
+  final Function(String title) onCreate;
+
+  @override
+  State<TodoInputField> createState() => _TodoInputFieldState();
+}
+
+class _TodoInputFieldState extends State<TodoInputField> {
+  final textCR = TextEditingController();
+
+  @override
+  void dispose() {
+    textCR.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +34,7 @@ class TodoInputField extends StatelessWidget {
           children: [
             Expanded(
               child: TextField(
-                controller: controller,
+                controller: textCR,
                 textInputAction: TextInputAction.done,
                 decoration: InputDecoration(
                   hintText: 'Введите задачу...',
@@ -30,7 +45,10 @@ class TodoInputField extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 8),
-            IconButton(icon: const Icon(Icons.add), onPressed: () {}),
+            IconButton(
+              icon: const Icon(Icons.add),
+              onPressed: () => widget.onCreate(textCR.text),
+            ),
           ],
         ),
       ),
