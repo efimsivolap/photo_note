@@ -1,8 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:photo_note/models/todo.dart';
 
-class TodosNotifier extends ValueNotifier<List<Todo>> {
-  TodosNotifier(super.value);
+sealed class TodosState {}
+
+class TodosData extends TodosState {
+  TodosData(this.todos);
+
+  final List<Todo> todos;
+}
+
+class TodosLoading extends TodosState {}
+
+class TodosError extends TodosState {
+  TodosError(this.message);
+
+  final String message;
+}
+
+class TodosNotifier extends ValueNotifier<TodosState> {
+  TodosNotifier() : super(TodosLoading());
 
   addTodo({
     required String title,
