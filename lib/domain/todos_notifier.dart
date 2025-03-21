@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:photo_note/models/todo.dart';
 
 class TodosNotifier extends ValueNotifier<List<Todo>> {
   TodosNotifier(super.value);

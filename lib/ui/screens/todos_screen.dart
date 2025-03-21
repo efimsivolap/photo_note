@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:photo_note/ui/widgets/filter_menu.dart';
+import 'package:photo_note/ui/widgets/todo_input_field.dart';
+import 'package:photo_note/ui/widgets/todo_item_widget.dart';
 
 class TodosScreen extends StatelessWidget {
   const TodosScreen({super.key});
@@ -8,13 +11,15 @@ class TodosScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text('Список тодо'),
+        title: Text('Photo Note'),
+        actions: const [FilterMenu()],
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[],
-        ),
+      body: const Column(
+        children: [
+          Expanded(child: TodoItemWidget()),
+          TodoInputField(),
+          SizedBox(height: 20),
+        ],
       ),
     );
   }
