@@ -20,8 +20,6 @@ class _TodoInputFieldState extends State<TodoInputField> {
 
   @override
   Widget build(BuildContext context) {
-    final TextEditingController controller = TextEditingController();
-
     return Padding(
       padding: const EdgeInsets.all(8),
       child: Container(
