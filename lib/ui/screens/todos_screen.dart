@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:photo_note/domain/filter_todos_notifier.dart';
+import 'package:photo_note/domain/theme_notifier.dart';
 import 'package:photo_note/domain/todos_notifier.dart';
 import 'package:photo_note/ui/widgets/filter_menu.dart';
 import 'package:photo_note/ui/widgets/todo_input_field.dart';
@@ -13,13 +16,13 @@ class TodosScreen extends StatefulWidget {
 }
 
 class _TodosScreenState extends State<TodosScreen> {
-  final filterTodosNR = FilterTodosNotifier();
-  final todosNR = TodosNotifier();
+  final _filterTodosNR = FilterTodosNotifier();
+  final _todosNR = TodosNotifier();
 
   @override
   void dispose() {
-    todosNR.dispose();
-    filterTodosNR.dispose();
+    _todosNR.dispose();
+    _filterTodosNR.dispose();
     super.dispose();
   }
 
@@ -27,40 +30,69 @@ class _TodosScreenState extends State<TodosScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text('Photo Note'),
-        actions: const [FilterMenu()],
+        title: const Text('Todo'),
+        actions: [
+          ValueListenableBuilder(
+            valueListenable: ThemeNotifier.instance,
+            builder: (context, themeMode, child) => IconButton(
+              onPressed: ThemeNotifier.instance.changeTheme,
+              icon: Icon(
+                themeMode == ThemeMode.light
+                    ? Icons.dark_mode
+                    : Icons.light_mode,
+              ),
+            ),
+          ),
+          ValueListenableBuilder(
+            valueListenable: _filterTodosNR,
+            builder: (context, filter, child) => FilterMenu(
+              onSelect: (newFilter) {
+                _filterTodosNR.value = newFilter;
+                _todosNR.updateFilter(newFilter);
+              },
+              filter: filter,
+            ),
+          ),
+        ],
       ),
       body: ValueListenableBuilder(
-        valueListenable: todosNR,
-        builder:
-            (context, todosState, child) => switch (todosState) {
-              TodosData() => Column(
-                children: [
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: todosState.todos.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        final todo = todosState.todos[index];
+        valueListenable: _todosNR,
+        builder: (context, todosState, child) => switch (todosState) {
+          TodosData() => Column(
+              children: [
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: todosState.todos.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      final todo = todosState.todos[index];
 
-                        return TodoTile(
-                          onDelete: () => todosNR.deleteTodo(todo),
-                          todo: todo,
-                        );
-                      },
-                    ),
+                      return TodoTile(
+                        onDelete: () => _todosNR.deleteTodo(todo),
+                        onUpdate: (
+                          String title,
+                          String description,
+                          List<File>? photos,
+                        ) =>
+                            _todosNR.updateTodo(
+                          oldTodo: todo,
+                          title: title,
+                          description: description,
+                          photos: photos,
+                        ),
+                        todo: todo,
+                      );
+                    },
                   ),
-                  TodoInputField(
-                    onCreate: (title) => todosNR.addTodo(title: title),
-                  ),
-                  const SizedBox(height: 20),
-                ],
-              ),
-              TodosLoading() => const Center(
-                child: CircularProgressIndicator(),
-              ),
-              TodosError() => Center(child: Text(todosState.message)),
-            },
+                ),
+                TodoInputField(
+                  onCreate: (title) => _todosNR.addTodo(title: title),
+                ),
+                const SizedBox(height: 20),
+              ],
+            ),
+          TodosLoading() => const Center(child: CircularProgressIndicator()),
+          TodosError() => Center(child: Text(todosState.message)),
+        },
       ),
     );
   }
