@@ -27,6 +27,19 @@ class TodosNotifier extends ValueNotifier<TodosState> {
   }
   String appPath = '';
 
+  @override
+  set value(TodosState newValue) {
+    if (newValue case TodosData(:final todos)) {
+      final result = todos.toList();
+
+      _saveTodos(result);
+
+      super.value = TodosData(result);
+    } else {
+      super.value = newValue;
+    }
+  }
+
   _init() async {
     final appDocumentsDir = await pp.getApplicationDocumentsDirectory();
     appPath = '${appDocumentsDir.path}\\todos_app';
@@ -63,7 +76,6 @@ class TodosNotifier extends ValueNotifier<TodosState> {
     if (value case TodosData(:final todos)) {
       final result = [...todos, todo];
       value = TodosData(result);
-      _saveTodos(result);
     }
   }
 
@@ -86,7 +98,6 @@ class TodosNotifier extends ValueNotifier<TodosState> {
       final result = todos.toList();
       result[index] = todo;
       value = TodosData(result);
-      _saveTodos(result);
     }
   }
 
@@ -97,9 +108,6 @@ class TodosNotifier extends ValueNotifier<TodosState> {
       final result = todos.toList();
       result.removeAt(index);
       value = TodosData(result);
-      _saveTodos(result);
     }
   }
-
-  sortTodosBy(sortModel) {}
 }

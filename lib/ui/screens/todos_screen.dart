@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:photo_note/domain/filter_todos_notifier.dart';
 import 'package:photo_note/domain/todos_notifier.dart';
 import 'package:photo_note/ui/widgets/filter_menu.dart';
 import 'package:photo_note/ui/widgets/todo_input_field.dart';
@@ -12,11 +13,13 @@ class TodosScreen extends StatefulWidget {
 }
 
 class _TodosScreenState extends State<TodosScreen> {
+  final filterTodosNR = FilterTodosNotifier();
   final todosNR = TodosNotifier();
 
   @override
   void dispose() {
     todosNR.dispose();
+    filterTodosNR.dispose();
     super.dispose();
   }
 
