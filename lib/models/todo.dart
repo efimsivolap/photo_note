@@ -43,15 +43,15 @@ class Todo {
     photos: (json['photos'] as List<dynamic>).map((e) => e as String).toList(),
   );
 
-  Map<String, dynamic> toJson(Todo instance) => <String, dynamic>{
-    'title': instance.title,
-    'description': instance.description,
-    'created': const EpochDateTimeConverter().toJson(instance.created),
+  Map<String, dynamic> toJson() => <String, dynamic>{
+    'title': title,
+    'description': description,
+    'created': const EpochDateTimeConverter().toJson(created),
     'updated':
-        instance.updated != null
-            ? const EpochDateTimeConverter().toJson(instance.updated!)
+        updated != null
+            ? const EpochDateTimeConverter().toJson(updated!)
             : null,
-    'photos': instance.photos,
+    'photos': photos,
   };
 
   @override

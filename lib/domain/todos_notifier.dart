@@ -33,7 +33,7 @@ class TodosNotifier extends ValueNotifier<TodosState> {
 
     final file = File('$appPath\\todos.json');
     if (!file.existsSync()) {
-      file.create();
+      file.create(recursive: true);
     }
 
     final data = file.readAsStringSync();
