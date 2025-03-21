@@ -1,6 +1,6 @@
 # photo_note
 
-A new Flutter project.
+PhotoNote is a simple and intuitive to-do list app that lets you attach photos to your tasks. Quickly add new notes, sort your list by time or name, and edit each item with a title, description, and images from your camera or gallery. Stay organized with a clean interface, dark/light theme support, and data persistence — so your tasks are always there when you come back.
 
 ## Getting Started
 
@@ -14,4 +14,3 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
-# photo_note
