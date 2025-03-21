@@ -1,4 +1,8 @@
+import 'dart:convert' show json;
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart' as pp;
 import 'package:photo_note/models/todo.dart';
 
 sealed class TodosState {}
@@ -23,18 +27,20 @@ class TodosNotifier extends ValueNotifier<TodosState> {
   }
 
   _init() async {
-    value = TodosData(await _loadTodos());
-  }
+    final appDocumentsDir = await pp.getApplicationDocumentsDirectory();
 
-  Future<List<Todo>> _loadTodos() async {
-    return [
-      Todo(
-        title: 'Важная заметка',
-        description: 'Была сохранена ранее',
-        created: DateTime.now(),
-        photos: [],
-      ),
+    final file = File('${appDocumentsDir.path}/todos.json');
+    if (!file.existsSync()) {
+      file.create();
+    }
+
+    final data = file.readAsStringSync();
+    final decoded = json.decode(data);
+    final todos = [
+      for (final todo in decoded as List)
+        Todo.fromJson(todo as Map<String, dynamic>),
     ];
+    value = TodosData(todos);
   }
 
   addTodo({required String title}) async {}
