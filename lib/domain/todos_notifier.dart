@@ -25,16 +25,19 @@ class TodosNotifier extends ValueNotifier<TodosState> {
   TodosNotifier() : super(TodosLoading()) {
     _init();
   }
+  String appPath = '';
 
   _init() async {
     final appDocumentsDir = await pp.getApplicationDocumentsDirectory();
+    appPath = '${appDocumentsDir.path}\\todos_app';
 
-    final file = File('${appDocumentsDir.path}/todos.json');
+    final file = File('$appPath\\todos.json');
     if (!file.existsSync()) {
       file.create();
     }
 
     final data = file.readAsStringSync();
+    if (data.isEmpty) return value = TodosData([]);
     final decoded = json.decode(data);
     final todos = [
       for (final todo in decoded as List)
@@ -43,15 +46,60 @@ class TodosNotifier extends ValueNotifier<TodosState> {
     value = TodosData(todos);
   }
 
-  addTodo({required String title}) async {}
+  _saveTodos(List<Todo> todos) async {
+    final encode = json.encode(todos);
+
+    final file = File('$appPath\\todos.json');
+    await file.writeAsString(encode);
+  }
+
+  addTodo({required String title}) async {
+    final todo = Todo(
+      title: title,
+      description: '',
+      created: DateTime.now(),
+      photos: [],
+    );
+    if (value case TodosData(:final todos)) {
+      final result = [...todos, todo];
+      value = TodosData(result);
+      _saveTodos(result);
+    }
+  }
 
   updateTodo({
+    required Todo oldTodo,
     String? title,
     String? description,
     List<String>? photos,
-  }) async {}
+  }) async {
+    final todo = Todo(
+      title: title ?? oldTodo.title,
+      description: description ?? oldTodo.description,
+      created: oldTodo.created,
+      updated: DateTime.now(),
+      photos: photos ?? oldTodo.photos,
+    );
+    if (value case TodosData(:final todos)) {
+      final index = todos.indexWhere((e) => e.created == oldTodo.created);
 
-  deleteTodo(Todo todo) async {}
+      final result = todos.toList();
+      result[index] = todo;
+      value = TodosData(result);
+      _saveTodos(result);
+    }
+  }
+
+  deleteTodo(Todo todo) async {
+    if (value case TodosData(:final todos)) {
+      final index = todos.indexWhere((e) => e.created == todo.created);
+
+      final result = todos.toList();
+      result.removeAt(index);
+      value = TodosData(result);
+      _saveTodos(result);
+    }
+  }
 
   sortTodosBy(sortModel) {}
 }
